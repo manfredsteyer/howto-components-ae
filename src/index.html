@@ -2,13 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>HowtoComponentsAe</title>
+  <title>demoComponentsAe</title>
   <base href="/">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <style>
+    /* 1:1 taken from the howto samples */
+
+    demo-tab {
+      border: 1px solid black;
+      padding: 20px;
+    }
+    demo-panel {
+      padding: 20px;
+      background-color: lightgray;
+    }
+    demo-tab[selected] {
+      background-color: bisque;
+    }
+  
+    /**
+     * If JavaScript does not run, the element will not match `:defined`.
+     * In that case this style adds spacing between tabs and previous panel.
+     */
+    demo-tabs:not(:defined), demo-tab:not(:defined), demo-panel:not(:defined) {
+      display: block;
+    }
+  </style>
+  
+
 </head>
 <body>
-  <app-root></app-root>
+  <demo-tabs>
+    <demo-tab role="heading" slot="tab">Tab 1</demo-tab>
+    <demo-panel role="region" slot="panel">Content 1</demo-panel>
+    <demo-tab role="heading" slot="tab">Tab 2</demo-tab>
+    <demo-panel role="region" slot="panel">Content 2</demo-panel>
+    <demo-tab role="heading" slot="tab">Tab 3</demo-tab>
+    <demo-panel role="region" slot="panel">Content 3</demo-panel>
+  </demo-tabs>  
+
+
 </body>
 </html>
