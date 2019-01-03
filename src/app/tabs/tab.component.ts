@@ -30,48 +30,20 @@ export class TabComponent implements OnInit, OnChanges {
   @HostBinding("attr.tabindex")
   tabIndex = -1;
 
+  _selected: boolean;
+
   @Input()
   set selected(value: boolean) {
-    // NOTE: Seems like, we need to do this manually.
-    // HostBinding('attr.xxx') does not help here b/c
-    // this is about creating/ removing an attribute
+    this._selected = value;
+    // Idea: Would be cool to expose a method as an element's method
+    // e. g. select()
 
-    // NOTE: AE seems to sync attributes with properties,
-    // Hence, this triggers this setter one more time.
-    // In the howto example the property sets the attribute
-    // like here. However, here it seems to cause a cycle.
-
-    // Just an Idea: If we had sth like
-    // @Passthrough() set selected(...) that creates a property
-    // with the same name in the AE wrapper just delegating
-    // to this one here, this could solve the issue. Other than
-    // @Input it would not sync with attributes
-    // Plus, we could also use it to expose specific methods
-    // via the AE wrapper
-
-    // HACK: To break this cycle, I'm using this here
-    // It's dirty as hell. Perhaps I'm missing a simple solution here.
-    // Father forgive me! ;-)
-
-    if (typeof value === "string") return;
-
-    // On the other side, the goal is to provide a property
-    // returning true if attribute selected exists
-    // and false otherwise.
-    if (value) {
-      this.element.nativeElement.setAttribute("selected", "true");
-    } else {
-      this.element.nativeElement.removeAttribute("selected");
-    }
-
-    // NOTE: Seems like, we don't have sth like attributeChangedCallback
-    // in Angular. A @HostBinding to attr.xyz does not help here
     this.ariaSelected = "" + this.selected;
     this.tabIndex = this.selected ? 0 : -1;
   }
 
   get selected(): boolean {
-    return this.element.nativeElement.hasAttribute("selected");
+    return this._selected;
   }
 
   constructor(private element: ElementRef<HTMLElement>) {}
@@ -79,7 +51,6 @@ export class TabComponent implements OnInit, OnChanges {
   ngOnInit() {
     if (!this.id) this.id = `howto-tab-generated-${howtoTabCounter++}`;
 
-    this.element.nativeElement.setAttribute("selected", "test del me!");
 
     // TODO: Do we need this?
     // this._upgradeProperty('selected');
